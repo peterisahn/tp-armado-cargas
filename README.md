@@ -45,7 +45,6 @@ Dada la complejidad computacional del problema, se desarrollaron diferentes estr
 - Equilibrar la minimización de vehículos con la similitud entre los productos transportados.
 - Modelar las restricciones de temperatura mediante ventanas de compatibilidad térmica.
 - Generar instancias representativas ante la ausencia de datos reales de temperatura y similitud.
-- Mejorar la eficiencia de los algoritmos mediante el precálculo de compatibilidades y la evaluación incremental de la función objetivo.
 - Evitar el estancamiento en óptimos locales y mantener tiempos de ejecución razonables para instancias de gran tamaño.
 
 ## Principales resultados
