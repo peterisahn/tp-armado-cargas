@@ -38,11 +38,7 @@ Dada la complejidad computacional del problema, se desarrollaron diferentes estr
   - Comparación de 14 combinaciones de algoritmos sobre 70 instancias.
   - Ajuste de los parámetros de perturbación y tiempo de ejecución del ILS.
   - Comparación con soluciones óptimas obtenidas mediante fuerza bruta.
-  - Evaluación del rendimiento sobre instancias de hasta 1000 productos.
-
-- **Testing y validación**:
-  - Tests automáticos para verificar el funcionamiento de los algoritmos.
-  - Validación de la factibilidad de las soluciones y evaluación de sus métricas.
+  - Evaluación del rendimiento sobre instancias de 1000 productos.
 
 ## Desafíos abordados
 
