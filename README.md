@@ -112,9 +112,6 @@ función objetivo, la factibilidad y el tiempo de ejecución.
 
 Función objetivo: `α·K − β·Σ_k Σ_{i<j ∈ B_k} s_ij`.
 
-Los valores por defecto corresponden al modelo y los parámetros seleccionados
-mediante la experimentación, cuya justificación se encuentra en el informe.
-
 ## Experimentos
 
 ```bash
@@ -131,7 +128,7 @@ Los resultados se guardan en `resultados/experimentos/` en formato CSV,
 junto con las tablas y los gráficos generados.
 
 El comando `informe` requiere haber ejecutado previamente los experimentos
-A1–A4. El tiempo de ejecución depende del equipo utilizado.
+A1–A4. 
 
 ### Instalación de BPPLIB
 
