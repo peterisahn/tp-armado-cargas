@@ -1,5 +1,3 @@
-# TP2 — Armado de cargas para entregas de supermercado
-
 # TD V - Diseño de Algoritmos: TP2 Bin Packing
 
 Repositorio con el modelado, la implementación, la experimentación y el análisis comparativo de algoritmos para resolver un problema de armado de cargas para entregas de supermercado, desarrollado para la materia Tecnología Digital V - Diseño de Algoritmos de la Universidad Torcuato Di Tella (2026).
