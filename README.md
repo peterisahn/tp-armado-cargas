@@ -137,8 +137,7 @@ incluidas en el repositorio. A3 genera sus propias instancias.
 
 Para ejecutar A4 o regenerar las instancias desde BPPLIB:
 
-1. Descargar [BPPLIB](https://github.com/mdelorme2/BPPLIB)
-   (Code → Download ZIP).
+1. Descargar [BPPLIB](https://github.com/mdelorme2/BPPLIB).
 2. Descomprimir el repositorio en `externos/BPPLIB-main/`.
 3. Crear la carpeta `Instances/BPP/` dentro de BPPLIB.
 4. Descomprimir `Instances/Benchmarks/1_Falkenauer.rar` dentro de
@@ -162,8 +161,6 @@ Para regenerar las 70 instancias originales:
 ```bash
 python3 scripts/generar_instancias.py
 ```
-
-La regeneración requiere también las instancias correspondientes de Schwerin.
 
 ## Formatos
 
