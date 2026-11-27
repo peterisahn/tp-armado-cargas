@@ -34,19 +34,26 @@ def pasada_relocate(ctx: Contexto, camiones: Solucion, limite: float) -> bool:
     hizo algún cambio. Vecindario: n productos x K camiones. Corta si el reloj pasa
     `limite`."""
     w, C = ctx.inst.pesos, ctx.inst.capacidad
+    # Guardamos las cargas para consultar el peso sin volver a sumar los productos.
     cargas = [ctx.carga(c) for c in camiones]
     mejoro = False
     for a, A in enumerate(camiones):
         if time.perf_counter() > limite:
             break
+        # Recorremos una copia porque un movimiento aceptado modifica A.
         for i in list(A):
             for b, B in enumerate(camiones):
+                # El destino tiene que ser otro camión que esté en uso.
                 if b == a or not B:
                     continue
+                # B debe tener capacidad para i, e i debe ser compatible con lo que ya lleva B.
                 if cargas[b] + w[i] > C + TOL or not ctx.compatible_con(i, B):
                     continue
+                # Armamos las cargas que quedarían para probar el movimiento sin aplicarlo aún.
                 A_nuevo = [x for x in A if x != i]
                 B_nuevo = B + [i]
+                # Solo cambian A y B, así que sus costos alcanzan para calcular el cambio en f.
+                # Si A queda vacío, su costo pasa a cero.
                 delta = (ctx.costo(A_nuevo) + ctx.costo(B_nuevo)
                          - ctx.costo(A) - ctx.costo(B))
                 if delta < -TOL:   # TOL: no aceptar mejoras que son sólo redondeo
@@ -55,7 +62,7 @@ def pasada_relocate(ctx: Contexto, camiones: Solucion, limite: float) -> bool:
                     cargas[a] -= w[i]
                     cargas[b] += w[i]
                     mejoro = True
-                    break
+                    break  # i ya se movió. Seguimos con el próximo producto de A.
     return mejoro
 
 
@@ -69,6 +76,7 @@ def pasada_swap(ctx: Contexto, camiones: Solucion, limite: float) -> bool:
     for a in range(len(camiones)):
         if time.perf_counter() > limite:
             break
+        # Empezamos después de a para probar cada par de camiones una sola vez por pasada.
         for b in range(a + 1, len(camiones)):
             A, B = camiones[a], camiones[b]
             for i in list(A):
@@ -77,13 +85,17 @@ def pasada_swap(ctx: Contexto, camiones: Solucion, limite: float) -> bool:
                     if (cargas[a] - w[i] + w[j] > C + TOL
                             or cargas[b] - w[j] + w[i] > C + TOL):
                         continue
+                    # Cada producto entrante se compara con los que se quedan en su destino.
+                    # sale indica qué producto se retira de ese camión en el intercambio.
                     if not (ctx.compatible_con(j, A, sale=i)
                             and ctx.compatible_con(i, B, sale=j)):
                         continue
+                    # Calculamos el costo del intercambio antes de modificar A y B.
                     A_nuevo = [x for x in A if x != i] + [j]
                     B_nuevo = [x for x in B if x != j] + [i]
                     delta = (ctx.costo(A_nuevo) + ctx.costo(B_nuevo)
                              - ctx.costo(A) - ctx.costo(B))
+                    # Si f baja más que la tolerancia, aplicamos el swap y actualizamos las cargas.
                     if delta < -TOL:
                         A.remove(i)
                         A.append(j)
@@ -100,10 +112,12 @@ def busqueda_local(ctx: Contexto, camiones: Solucion, tiempo_max: float = float(
                    relocate: bool = True, swap: bool = True) -> Solucion:
     """Aplica pasadas de relocate y de swap hasta que ninguna mejora (óptimo local) o
     hasta que pasen tiempo_max segundos. relocate / swap = False apagan un operador."""
+    # Copiamos cada camión para trabajar sobre una solución propia.
     camiones = [list(c) for c in camiones]
     limite = time.perf_counter() + tiempo_max
     mejoro = True
     while mejoro and time.perf_counter() < limite:
+        # Una mejora en cualquiera de las pasadas habilita otra vuelta si queda tiempo.
         mejoro = False
         if relocate and pasada_relocate(ctx, camiones, limite):
             mejoro = True

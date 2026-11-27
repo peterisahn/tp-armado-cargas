@@ -40,17 +40,31 @@ def construir(ctx: Contexto, criterio: str, orden: Optional[List[int]] = None,
     pesos = ctx.inst.pesos
     camiones = [list(c) for c in camiones] if camiones else []
     if orden is None:
+        # Antes del bucle, ordenamos los índices por peso de mayor a menor.
+        # (El signo menos hace que sorted ubique primero los productos más pesados).
         orden = sorted(range(ctx.inst.n), key=lambda i: -pesos[i])
 
     for i in orden:
+        # Para ambas heurísticas, un camión es candidato si tiene capacidad para agregar i
+        # y además todos los productos que ya lleva son compatibles con i.
         candidatos = [c for c in camiones if ctx.entra(i, c)]
         if not candidatos:
-            camiones.append([i])                       # abrir un camión nuevo
+            # Abrimos un camión con i y pasamos al siguiente producto.
+            camiones.append([i])
             continue
+
+        # max devuelve el camión con la mayor tupla. Compara el primer valor y usa el segundo para desempatar. 
+        # Las heurísticas invierten el orden de las tuplas. 
+        # (similitud_con suma los pares nuevos entre i y cada producto del camión).
+        # (La carga es la carga que tiene con los productos actuales sin contar i).
         if criterio == "bfd":
+            # BFD prioriza la carga. 
+            # El camión con mayor carga actual es el que quedará más lleno.
             elegido = max(candidatos, key=lambda c: (ctx.carga(c), ctx.similitud_con(i, c)))
         else:
+            # Más parecido prioriza cuánto aumentaría la similitud al agregar i.
             elegido = max(candidatos, key=lambda c: (ctx.similitud_con(i, c), ctx.carga(c)))
+        # Agregamos i al camión elegido antes de calcular los candidatos del próximo producto.
         elegido.append(i)
     return camiones
 
